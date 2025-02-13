@@ -52,7 +52,7 @@ macro_rules! impl_aes {
             pub const BLOCK_SIZE: usize = BLOCK_SIZE;
 
             /// Initializes the AES block cipher.
-            //#[inline]
+            #[inline]
             pub fn new(key: &[u8; $k]) -> Self {
                 let mut rk = Zeroizing::new([[0; 4]; $n]);
                 key_schedule(&mut rk, key);

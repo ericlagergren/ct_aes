@@ -31,14 +31,11 @@ macro_rules! bench_aes32 {
             g.throughput(Throughput::Bytes(2 * BLOCK_SIZE as u64))
                 .bench_function("encrypt_blocks", |b| {
                     let mut aes = <$aes>::new(&[0u8; <$aes>::KEY_SIZE]);
-                    let mut block1 = Block::default();
-                    let mut block2 = Block::default();
+                    let mut blocks = [[0; BLOCK_SIZE]; 2];
                     b.iter(|| {
-                        black_box(&mut aes)
-                            .encrypt_blocks(black_box(&mut block1), black_box(&mut block2))
+                        black_box(&mut aes).encrypt_blocks(black_box(&mut blocks));
                     });
-                    black_box(&block1);
-                    black_box(&block2);
+                    black_box(&blocks);
                 });
 
             g.finish();
@@ -73,22 +70,11 @@ macro_rules! bench_aes64 {
             g.throughput(Throughput::Bytes(4 * BLOCK_SIZE as u64))
                 .bench_function("encrypt_blocks", |b| {
                     let mut aes = <$aes>::new(&[0u8; <$aes>::KEY_SIZE]);
-                    let mut block1 = Block::default();
-                    let mut block2 = Block::default();
-                    let mut block3 = Block::default();
-                    let mut block4 = Block::default();
+                    let mut blocks = [[0; BLOCK_SIZE]; 4];
                     b.iter(|| {
-                        black_box(&mut aes).encrypt_blocks(
-                            black_box(&mut block1),
-                            black_box(&mut block2),
-                            black_box(&mut block3),
-                            black_box(&mut block4),
-                        )
+                        black_box(&mut aes).encrypt_blocks(black_box(&mut blocks));
                     });
-                    black_box(&block1);
-                    black_box(&block2);
-                    black_box(&block3);
-                    black_box(&block4);
+                    black_box(&blocks);
                 });
 
             g.finish();
